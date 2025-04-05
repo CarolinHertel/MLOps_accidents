@@ -94,10 +94,10 @@ def process_data(input_filepath_users, input_filepath_caract, input_filepath_pla
 
 
     #--Replacing values -1 and 0 
-    col_to_replace0_na = [ "trajet", "catv", "motor"]
-    col_to_replace1_na = [ "trajet", "secu1", "catv", "obsm", "motor", "circ", "surf", "situ", "vma", "atm", "col"]
-    df[col_to_replace1_na] = df[col_to_replace1_na].replace(-1, np.nan)
-    df[col_to_replace0_na] = df[col_to_replace0_na].replace(0, np.nan)
+#    col_to_replace0_na = [ "trajet", "catv", "motor"]
+#    col_to_replace1_na = [ "trajet", "secu1", "catv", "obsm", "motor", "circ", "surf", "situ", "vma", "atm", "col"]
+#    df[col_to_replace1_na] = df[col_to_replace1_na].replace(-1, np.nan)
+#    df[col_to_replace0_na] = df[col_to_replace0_na].replace(0, np.nan)
 
 
     #--Dropping columns 
