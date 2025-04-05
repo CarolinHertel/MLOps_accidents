@@ -48,7 +48,7 @@ def process_data(input_filepath_users, input_filepath_caract, input_filepath_pla
         if (i>120)|(i<0):
             df_users["victim_age"].replace(i,np.nan)
     df_caract["hour"] = df_caract["hrmn"].astype(str).apply(lambda x : x[:-3])
-    df_caract.drop(['hrmn', 'an'], inplace=True, axis=1)
+#   df_caract.drop(['hrmn', 'an'], inplace=True, axis=1)
     df_users.drop(['an_nais'], inplace=True, axis=1)
 
     #--Replacing names 
@@ -90,7 +90,7 @@ def process_data(input_filepath_users, input_filepath_caract, input_filepath_pla
     df.rename({"count" :"nb_vehicules"},axis = 1, inplace = True)
 
     #--Modification of the target variable  : 1 : prioritary // 0 : non-prioritary
-    df['grav'].replace([2,3,4], [0,1,1], inplace=True)
+#   df['grav'].replace([2,3,4], [0,1,1], inplace=True)
 
 
     #--Replacing values -1 and 0 
