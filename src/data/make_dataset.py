@@ -115,9 +115,9 @@ def process_data(input_filepath_users, input_filepath_caract, input_filepath_pla
     X_train, X_test, y_train, y_test = train_test_split(feats, target, test_size=0.3, random_state = 42)
 
     #--Filling NaN values
-    col_to_fill_na = ["surf", "circ", "col", "motor"]
-    X_train[col_to_fill_na] = X_train[col_to_fill_na].fillna(X_train[col_to_fill_na].mode().iloc[0])
-    X_test[col_to_fill_na] = X_test[col_to_fill_na].fillna(X_train[col_to_fill_na].mode().iloc[0])
+#    col_to_fill_na = ["surf", "circ", "col", "motor"]
+#   X_train[col_to_fill_na] = X_train[col_to_fill_na].fillna(X_train[col_to_fill_na].mode().iloc[0])
+#   X_test[col_to_fill_na] = X_test[col_to_fill_na].fillna(X_train[col_to_fill_na].mode().iloc[0])
 
     # Create folder if necessary 
     if check_existing_folder(output_folderpath) :
