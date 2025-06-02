@@ -64,6 +64,10 @@ Convention : All python scripts must be run from the root specifying the relativ
 
     `./my_env/Scripts/activate`
 
+    alternative
+
+    my_env\Scripts\activate.bat
+
 ###   Install the packages from requirements.txt
 
     `pip install -r .\requirements.txt` ### You will have an error in "setup.py" but this won't interfere with the rest
