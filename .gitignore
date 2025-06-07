@@ -91,5 +91,4 @@ target/
 .devcontainer/devcontainer.json
 
 # exclude models from source control by default
-/models/
 mlruns/128208172982319055/f2cbdb28d52048bb97173a478cb8e154/artifacts/model/model.pkl
