@@ -91,3 +91,7 @@ target/
 # Mypy cache
 .mypy_cache/
 *.joblib
+.devcontainer/devcontainer.json
+
+# exclude models from source control by default
+/models/
