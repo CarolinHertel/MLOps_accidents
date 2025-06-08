@@ -5,15 +5,31 @@ This project is a starting Pack for MLOps projects based on the subject "road ac
 
 Project Organization
 ------------
-
+    ├── devcontainer          <- Contains the Dockerfile and devcontainer.json for VS Code remote development.
+    │   ├── devcontainer.json
+    ├── .dvc                <- DVC configuration files for data versioning.
+    │   ├── cache
+    │   ├── tmp
+    │   ├── config
+    │   ├── config.local
+    │   ├── gitignore
+    ├── github/workflows <- GitHub Actions workflows for CI/CD.
+    │   ├── python-app.yml 
     ├── LICENSE
+    ├── dvcignore          <- DVC ignore file, similar to .gitignore.
+    ├── .gitignore         <- A default gitignore file for Python projects
+    ├── Dockerfile          <- Dockerfile for containerizing the application.
+    ├── dvc.yaml 
     ├── README.md          <- The top-level README for developers using this project.
     ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
     │   ├── processed      <- The final, canonical data sets for modeling.
     │   └── raw            <- The original, immutable data dump.
-    │
+    ├── mlruns
+    │   ├── .trash
+    │   ├── 0                <- Directory for the first experiment run
+    │   ├── 128208172982319055                <- Directory for the second experiment run
+    │   ├── models          <- Directory for storing model artifacts
+
     ├── logs               <- Logs from training and predicting
     │
     ├── models             <- Trained and serialized models, model predictions, or model summaries
