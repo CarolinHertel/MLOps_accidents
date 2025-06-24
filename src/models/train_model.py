@@ -6,6 +6,7 @@ import mlflow
 import mlflow.sklearn
 from sklearn import ensemble
 from sklearn.metrics import accuracy_score
+import bentoml
 
 print(joblib.__version__)
 
@@ -56,3 +57,6 @@ print("Model trained and saved successfully.")
 
 print(f"✅ Model trained and logged with accuracy: {accuracy:.4f}")
 print("Model logged with MLflow.")
+
+#-- Save Model to bentoML
+bentoml.rf_classifier.save_model("predict_model", rf_classifier)
