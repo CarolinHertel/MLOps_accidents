@@ -1,62 +1,51 @@
-import pandas as pd 
-from sklearn import ensemble
-import joblib
+import pandas as pd
 import numpy as np
-import mlflow
-import mlflow.sklearn
-from sklearn import ensemble
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
-import bentoml
+import joblib
+import mlflow
+import os
 
-print(joblib.__version__)
+# Set MLflow tracking URI to your local directory
+mlflow.set_tracking_uri("file:///Users/martahoisak/MLOps_accidents/mlruns")
+mlflow.set_experiment("Accident_Prediction")
 
-X_train = pd.read_csv('data/preprocessed/X_train.csv')
-X_test = pd.read_csv('data/preprocessed/X_test.csv')
-y_train = pd.read_csv('data/preprocessed/y_train.csv')
-y_test = pd.read_csv('data/preprocessed/y_test.csv')
+# Load data
+X_train = pd.read_csv("data/preprocessed/X_train_clean.csv")
+X_test = pd.read_csv("data/preprocessed/X_test_clean.csv")
+y_train = pd.read_csv("data/preprocessed/y_train.csv")
+y_test = pd.read_csv("data/preprocessed/y_test.csv")
+
+# Flatten labels
 y_train = np.ravel(y_train)
 y_test = np.ravel(y_test)
 
-mlflow.set_experiment("Accident_Prediction")
-#rf_classifier = ensemble.RandomForestClassifier(n_jobs = -1)
+# One-hot encode and align columns
+X_train = pd.get_dummies(X_train)
+X_test = pd.get_dummies(X_test)
+X_test = X_test.reindex(columns=X_train.columns, fill_value=0)
 
-#--Train the model and start tracking run with MLflow
-with mlflow.start_run(): 
+# Convert int to float64 to avoid schema issues
+X_train = X_train.astype({col: 'float64' for col in X_train.select_dtypes(include='int').columns})
+X_test = X_test.astype({col: 'float64' for col in X_test.select_dtypes(include='int').columns})
 
-#--Initialize and train the Random Forest Classifier
-    rf_classifier = ensemble.RandomForestClassifier(n_jobs=-1, n_estimators=100, max_depth=None, random_state=42)
-    rf_classifier.fit(X_train, y_train)
+# Train model
+model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
+model.fit(X_train, y_train)
 
-# --Predict and evaluate the model
-    y_pred = rf_classifier.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
+# Evaluate
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"✅ Accuracy: {accuracy:.4f}")
 
-#--Log model parameters and metrics to MLflow
+# Save model manually
+model_filename = "src/models/trained_model.joblib"
+joblib.dump(model, model_filename)
+
+# Log parameters + metrics only (no artifacts/models to avoid filesystem error)
+with mlflow.start_run():
     mlflow.log_param("n_estimators", 100)
-    mlflow.log_param("max_depth", None)
-    mlflow.log_param("n_jobs", -1)
     mlflow.log_param("random_state", 42)
-
-#--Log the accuracy
     mlflow.log_metric("accuracy", accuracy)
 
-#--Log the trained model to MLflow
-    mlflow.sklearn.log_model(rf_classifier, artifact_path="model")
-    
-# Also save locally as joblib file
-    model_filename = './src/models/trained_model.joblib'
-    joblib.dump(rf_classifier, model_filename)
-    mlflow.log_artifact(model_filename, artifact_path="model_artifacts")
-
-rf_classifier.fit(X_train, y_train)
-
-#--Save the trained model to a file
-model_filename = './src/models/trained_model.joblib'
-joblib.dump(rf_classifier, model_filename)
-print("Model trained and saved successfully.")
-
-print(f"✅ Model trained and logged with accuracy: {accuracy:.4f}")
-print("Model logged with MLflow.")
-
-#-- Save Model to bentoML
-bentoml.rf_classifier.save_model("predict_model", rf_classifier)
+print("✅ Model saved and metrics logged successfully.")
