@@ -13,7 +13,7 @@ import time
 
 # Prometheus imports
 from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
-from fastapi.responses import Response
+from fastapi.responses import Responsegit
 
 # Load secret key from .env or hardcode for local testing
 load_dotenv()
@@ -53,14 +53,13 @@ class HTTPBearer401(HTTPBearer):
 
 # Load model and create runner with timing
 start_time = time.time()
-#model_ref = bentoml.sklearn.get("predict_model:latest")
-model_ref = bentoml.sklearn.load_model("predict_model:latest")
+model_ref = bentoml.sklearn.get("predict_model:latest")
 model_runner = model_ref.to_runner()
 load_time = time.time() - start_time
 model_load_time.set(load_time)
 
 # BentoML Service
-svc = bentoml.Service("AdmissionPredictionService")
+svc = bentoml.Service("AdmissionPredictionService", runners=[model_runner])
 
 # Auth token generator
 def create_jwt_token(username: str) -> str:
