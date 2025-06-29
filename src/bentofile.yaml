@@ -1,5 +1,6 @@
 service: "api.service:svc"
 name: AccidentPredictionService
+version: "1.0.0"
 
 description: "Predict the chance of having a heavy"
 
