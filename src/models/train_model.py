@@ -10,10 +10,10 @@ import bentoml
 
 print(joblib.__version__)
 
-X_train = pd.read_csv('data/preprocessed/X_train.csv')
-X_test = pd.read_csv('data/preprocessed/X_test.csv')
-y_train = pd.read_csv('data/preprocessed/y_train.csv')
-y_test = pd.read_csv('data/preprocessed/y_test.csv')
+X_train = pd.read_csv('../../data/preprocessed/X_train.csv')
+X_test = pd.read_csv('../../data/preprocessed/X_test.csv')
+y_train = pd.read_csv('../../data/preprocessed/y_train.csv')
+y_test = pd.read_csv('../../data/preprocessed/y_test.csv')
 y_train = np.ravel(y_train)
 y_test = np.ravel(y_test)
 
@@ -44,14 +44,14 @@ with mlflow.start_run():
     mlflow.sklearn.log_model(rf_classifier, artifact_path="model")
     
 # Also save locally as joblib file
-    model_filename = './src/models/trained_model.joblib'
+    model_filename = 'trained_model.joblib'
     joblib.dump(rf_classifier, model_filename)
     mlflow.log_artifact(model_filename, artifact_path="model_artifacts")
 
 rf_classifier.fit(X_train, y_train)
 
 #--Save the trained model to a file
-model_filename = './src/models/trained_model.joblib'
+model_filename = 'trained_model.joblib'
 joblib.dump(rf_classifier, model_filename)
 print("Model trained and saved successfully.")
 
@@ -59,4 +59,5 @@ print(f"✅ Model trained and logged with accuracy: {accuracy:.4f}")
 print("Model logged with MLflow.")
 
 #-- Save Model to bentoML
-bentoml.rf_classifier.save_model("predict_model", rf_classifier)
+bentoml.sklearn.save_model("predict_model", rf_classifier)
+print("Model saved to BentoML successfully.")
