@@ -13,7 +13,7 @@ import time
 
 # Prometheus imports
 from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
-from fastapi.responses import Responsegit
+from fastapi.responses import Response
 
 # Load secret key from .env or hardcode for local testing
 load_dotenv()
@@ -34,13 +34,35 @@ model_load_time = Gauge('model_load_time_seconds', 'Time taken to load model')
 
 # Request schema
 class AdmissionRequest(BaseModel):
-    gre_score: float
-    toefl_score: float
-    university_rating: int
-    sop: float
-    lor: float
-    cgpa: float
-    research: int
+    place: int
+    catu: int
+    sexe: int
+    secu1: float
+    year_acc: int
+    victim_age: int
+    catv: int
+    obsm: int
+    motor: int
+    catr: int
+    circ: int
+    surf: int
+    situ: int
+    vma: int
+    jour: int
+    mois: int
+    lum: int
+    dep: int
+    com: int
+    agg_:int
+    int: int
+    atm: int
+    col: int
+    lat: float
+    long: float
+    hour: int
+    nb_victim: int
+    nb_vehicules: int
+    
 
 class HTTPBearer401(HTTPBearer):
     async def __call__(self, request: Request):
@@ -59,7 +81,7 @@ load_time = time.time() - start_time
 model_load_time.set(load_time)
 
 # BentoML Service
-svc = bentoml.Service("AdmissionPredictionService", runners=[model_runner])
+svc = bentoml.Service("AdmissionPredictionService")
 
 # Auth token generator
 def create_jwt_token(username: str) -> str:
