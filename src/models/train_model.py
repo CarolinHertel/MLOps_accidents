@@ -55,11 +55,11 @@ with mlflow.start_run():
     # Metriken zu MLflow loggen
     mlflow.log_metric("accuracy", accuracy)
 
-    # Modell zu MLflow loggen (mit korrigierter Syntax)
+    # Modell zu MLflow loggen (korrekte Syntax ohne artifact_path)
     try:
         mlflow.sklearn.log_model(
-            rf_classifier, 
-            "model",  # Verwende 'name' statt 'artifact_path'
+            sk_model=rf_classifier,
+            artifact_path="model",  # Dieser Parameter ist korrekt für den Pfad im MLflow Run
             input_example=X_train.iloc[:5],  # Eingabebeispiel hinzufügen
             signature=mlflow.models.infer_signature(X_train, y_train)  # Signatur hinzufügen
         )
