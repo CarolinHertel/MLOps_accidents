@@ -56,3 +56,15 @@ except Exception as e:
     exit(1)
 
 print("\n=== Model test completed successfully ===")
+
+# Lade das Modell
+try:
+    model_ref = bentoml.sklearn.get("predict_model:latest")
+    print(f"✅ Model loaded: {model_ref.tag}")
+    
+    # Teste Runner-Erstellung
+    runner = model_ref.to_runner()
+    print(f"✅ Runner created: {runner}")
+    
+except Exception as e:
+    print(f"❌ Error: {e}")

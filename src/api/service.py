@@ -1,6 +1,7 @@
 # Erweiterte Version deiner API mit Prometheus Monitoring
 import bentoml
 from bentoml.io import JSON
+import joblib
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 from fastapi import FastAPI, Depends, HTTPException, status, Request
@@ -73,15 +74,25 @@ class HTTPBearer401(HTTPBearer):
                 raise HTTPException(status_code=401, detail="Not authenticated")
             raise
 
+def load_model():
+    """Lädt das Modell direkt ohne Runner"""
+    try:
+        # Versuche joblib-Datei zu laden
+        if os.path.exists("trained_model.joblib"):
+            return joblib.load("trained_model.joblib")
+        else:
+            raise FileNotFoundError("trained_model.joblib nicht gefunden!")
+    except Exception as e:
+        print(f"Fehler beim Laden des Modells: {e}")
+        return None
+
 # Load model and create runner with timing
-start_time = time.time()
-model_ref = bentoml.sklearn.get("predict_model:latest")
-model_runner = model_ref.to_runner()
-load_time = time.time() - start_time
-model_load_time.set(load_time)
+model = load_model()
+# Erstelle den Service OHNE Runner
+svc = bentoml.Service("accident_prediction")
 
 # BentoML Service
-svc = bentoml.Service("AdmissionPredictionService")
+
 
 # Auth token generator
 def create_jwt_token(username: str) -> str:
@@ -189,7 +200,7 @@ async def predict_with_auth(input_data: AdmissionRequest):
     prediction_start = time.time()
     
     input_array = admission_request_to_numpy(input_data)
-    prediction = await model_runner.async_run(input_array)
+    prediction = model.predict(input_array)
     
     # Update prediction metrics
     prediction_count.inc()
@@ -203,7 +214,7 @@ async def predict_simple(input_data: AdmissionRequest):
     prediction_start = time.time()
     
     input_array = admission_request_to_numpy(input_data)
-    prediction = await model_runner.async_run(input_array)
+    prediction = model.predict(input_array)
     
     # Update prediction metrics
     prediction_count.inc()
