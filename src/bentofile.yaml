@@ -7,6 +7,9 @@ labels:
   owner: "Carolin Hertel"
   project: "Admissions Prediction"
 
+models:
+  - "predict_model:latest"
+
 include:
   - "api/"
   - "models/"
