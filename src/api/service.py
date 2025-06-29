@@ -81,7 +81,7 @@ load_time = time.time() - start_time
 model_load_time.set(load_time)
 
 # BentoML Service
-svc = bentoml.Service("AdmissionPredictionService", runners=[model_runner])
+svc = bentoml.Service("AdmissionPredictionService")
 
 # Auth token generator
 def create_jwt_token(username: str) -> str:
