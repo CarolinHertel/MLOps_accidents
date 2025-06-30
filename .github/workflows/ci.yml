@@ -26,7 +26,7 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest || python -m unittest discover
+        pytest src/tests
 
   docker:
     runs-on: ubuntu-latest
