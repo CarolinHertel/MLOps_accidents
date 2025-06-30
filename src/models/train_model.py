@@ -34,9 +34,9 @@ with mlflow.start_run():
     # Random Forest Classifier initialisieren und trainieren
     rf_classifier = ensemble.RandomForestClassifier(
         n_jobs=-1, 
-        n_estimators=100, 
+        n_estimators=120, 
         max_depth=None, 
-        random_state=42
+        random_state=45
     )
     rf_classifier.fit(X_train, y_train)
     print("Model training completed.")
@@ -82,7 +82,7 @@ with mlflow.start_run():
 
 # BentoML Model speichern
 try:
-    bentoml.sklearn.save_model("predict_model", rf_classifier)
+    #bentoml.sklearn.save_model("predict_model", rf_classifier)
     print("✅ Model saved to BentoML successfully.")
 except Exception as e:
     print(f"❌ BentoML saving failed: {e}")
