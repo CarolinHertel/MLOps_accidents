@@ -33,7 +33,7 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest src/tests
+        pytest src/tests --maxfail=1 --disable-warnings -q
 
   docker:
     runs-on: ubuntu-latest
