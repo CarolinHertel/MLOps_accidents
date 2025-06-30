@@ -10,6 +10,8 @@ from fastapi import Request, HTTPException
 import os
 from dotenv import load_dotenv
 import numpy as np
+from src.models.predict_model import predict
+
 
 # Load secret key from .env or hardcode for local testing
 load_dotenv()
