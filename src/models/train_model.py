@@ -1,6 +1,4 @@
-import pandas as pd 
-from sklearn import ensemble
-import joblib
+import pandas as pd
 import numpy as np
 import mlflow
 import mlflow.sklearn
@@ -41,18 +39,18 @@ with mlflow.start_run():
     rf_classifier.fit(X_train, y_train)
     print("Model training completed.")
 
-    # Vorhersagen und Bewertung
-    y_pred = rf_classifier.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Model accuracy: {accuracy:.4f}")
+# Evaluate
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"✅ Accuracy: {accuracy:.4f}")
+
+# Save model manually
+model_filename = "src/models/trained_model.joblib"
+joblib.dump(model, model_filename)
 
     # Parameter zu MLflow loggen
     mlflow.log_param("n_estimators", 100)
-    mlflow.log_param("max_depth", None)
-    mlflow.log_param("n_jobs", -1)
     mlflow.log_param("random_state", 42)
-
-    # Metriken zu MLflow loggen
     mlflow.log_metric("accuracy", accuracy)
 
     # Modell zu MLflow loggen (korrekte Syntax ohne artifact_path)
