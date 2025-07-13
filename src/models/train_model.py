@@ -49,7 +49,6 @@ model_filename = "src/models/trained_model.joblib"
 joblib.dump(model, model_filename)
 
     # Parameter zu MLflow loggen
-=======
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
@@ -94,15 +93,12 @@ joblib.dump(model, model_filename)
 
 # Log parameters + metrics only (no artifacts/models to avoid filesystem error)
 with mlflow.start_run():
->>>>>>> 93f2a6a (Train model with MLflow tracking and joblib saving)
+ 93f2a6a (Train model with MLflow tracking and joblib saving)
     mlflow.log_param("n_estimators", 100)
     mlflow.log_param("random_state", 42)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-    # Metriken zu MLflow loggen
-=======
->>>>>>> 8a713b86c898e1119cc3122bd5e773f09fc1c5c9
+    # Metriken zu MLflow login 
+ 8a713b86c898e1119cc3122bd5e773f09fc1c5c9
     mlflow.log_metric("accuracy", accuracy)
 
     # Modell zu MLflow loggen (korrekte Syntax ohne artifact_path)
@@ -140,8 +136,8 @@ except Exception as e:
 print(f"\n🎉 Training completed!")
 print(f"📊 Final accuracy: {accuracy:.4f}")
 print(f"💾 Model saved locally and to BentoML")
-=======
+
     mlflow.log_metric("accuracy", accuracy)
 
 print("✅ Model saved and metrics logged successfully.")
->>>>>>> 93f2a6a (Train model with MLflow tracking and joblib saving)
+ 93f2a6a (Train model with MLflow tracking and joblib saving)
