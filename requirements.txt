@@ -1,4 +1,7 @@
-# external requirements
+bentoml==1.0.20
+fastapi==0.79.1
+starlette==0.19.1
+pydantic==1.10.13
 click
 Sphinx
 coverage
@@ -11,10 +14,7 @@ imbalanced-learn
 joblib
 mlflow
 dvc
-bentoml
 transformers
-pydantic
-fastapi
 PyJWT
 python-dotenv
 requests

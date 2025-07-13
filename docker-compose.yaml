@@ -6,12 +6,14 @@ volumes:
   grafana_data:
 services:
   prediction-server:
+    build: .
     image: accidentpredictionservice:1.0.0
     container_name: prediction
     ports:
       - "3000:3000"
     networks:
       - frontend-nw
+    command: uvicorn src.api.app:app --host 0.0.0.0 --port 8000
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus

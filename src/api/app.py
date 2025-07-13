@@ -40,7 +40,7 @@ class HTTPBearer401(HTTPBearer):
             raise
         
 # Load model
-model_ref = bentoml.sklearn.get("prediction_model:latest")
+model_ref = bentoml.sklearn.get("admission_model:latest")
 model_runner = model_ref.to_runner()
 
 svc = bentoml.Service("admission_service", runners=[model_runner])
