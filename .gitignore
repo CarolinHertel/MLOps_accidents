@@ -1,0 +1,113 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+myenv/
+my_env/
+venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# DotEnv configuration
+.env
+
+# Database
+*.db
+*.rdb
+
+# Pycharm
+.idea
+
+# VS Code
+.vscode/
+
+# Spyder
+.spyproject/
+
+# Jupyter NB Checkpoints
+.ipynb_checkpoints/
+
+# Mac OS-specific storage files
+.DS_Store
+
+# vim
+*.swp
+*.swo
+
+# Mypy cache
+.mypy_cache/
+*.joblib
+.devcontainer/devcontainer.json
+
+# exclude models from source control by default
+mlruns/128208172982319055/f2cbdb28d52048bb97173a478cb8e154/artifacts/model/model.pkl
+src/models/mlruns/
+MlOps_img.tar.gz
+Mlops_image.tar.gz
+docs/2025-06-30 19 00 11.png
+docs/2025-06-30 19 00 12 (2).png
+docs/2025-06-30 19 00 12 (3).png
+docs/2025-06-30 19 00 12 (4).png
+docs/2025-06-30 19 00 12 (5).png
+docs/2025-06-30 19 00 12 (6).png
+docs/2025-06-30 19 00 12 (7).png
+docs/2025-06-30 19 00 12 (8).png
+docs/2025-06-30 19 00 12 (9).png
+docs/2025-06-30 19 00 12.png
+data/raw_data/caracteristiques-2021.csv
+data/raw_data/lieux-2021.csv
+data/raw_data/usagers-2021.csv
+data/raw_data/vehicules-2021.csv
+/.venv/
+mlruns/
