@@ -32,9 +32,14 @@ X_train = pd.get_dummies(X_train)
 X_test = pd.get_dummies(X_test)
 X_test = X_test.reindex(columns=X_train.columns, fill_value=0)
 
-# Convert int columns to float64 to avoid schema issues
+# Convert int columns to float64 to avoid schema issues (THIS WAS BROKEN BEFORE!)
 X_train = X_train.astype({col: 'float64' for col in X_train.select_dtypes(include='int').columns})
 X_test = X_test.astype({col: 'float64' for col in X_test.select_dtypes(include='int').columns})
+
+# Save the column names used for training (important for serving)
+columns_filename = "src/models/trained_model_columns.npy"
+np.save(columns_filename, X_train.columns.values)
+print(f"✅ Model columns saved as: {columns_filename}")
 
 # Train model
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
@@ -69,6 +74,7 @@ with mlflow.start_run():
     # Log artifact to MLflow
     try:
         mlflow.log_artifact(model_filename, artifact_path="model_artifacts")
+        mlflow.log_artifact(columns_filename, artifact_path="model_artifacts")
         print("✅ Model artifact logged to MLflow")
     except Exception as e:
         print(f"⚠️ MLflow artifact logging failed: {e}")
