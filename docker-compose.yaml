@@ -305,13 +305,13 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-  # prediction-server:
-  #   image: accidentpredictionservice:1.0.0
-  #   container_name: prediction
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - frontend-nw
+  prediction-server:
+    image: accidentpredictionservice:1.0.0
+    container_name: prediction
+    ports:
+      - "3000:3000"
+    networks:
+       - frontend-nw
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
