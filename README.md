@@ -84,34 +84,21 @@ Convention : All python scripts must be run from the root specifying the relativ
 
     my_env\Scripts\activate.bat
 
-###   Install the packages from requirements.txt
+###   1-Build docker container
 
-    `pip install -r .\requirements.txt` ### You will have an error in "setup.py" but this won't interfere with the rest
+    docker build -t accidentpredictionservice:1.0.0 .
 
-### 2- Execute import_raw_data.py to import the 4 datasets.
+### 2- Execute docker compose
 
-    `python .\src\data\import_raw_data.py` ### It will ask you to create a new folder, accept it.
+    `docker-compose up -d.
 
-### 3- Execute make_dataset.py initializing `./data/raw` as input file path and `./data/preprocessed` as output file path.
+### 3- Run the Docker Container
 
-    `python .\src\data\make_dataset.py`
+    docker run --rm -d -p 3000:3000 examen_bentoml:1.0.0
 
-### 4- Execute train_model.py to instanciate the model in joblib format
+# BentoML API will be available at `http://localhost:3000`
 
-    `python .\src\models\train_model.py`
+### 4- Please use the login-service with this credentials
 
-### 5- Finally, execute predict_model.py with respect to one of these rules :
-  
-  - Provide a json file as follow : 
-
-    
-    `python ./src/models/predict_model.py ./src/models/test_features.json`
-
-  test_features.json is an example that you can try 
-
-  - If you do not specify a json file, you will be asked to enter manually each feature. 
-
-
-------------------------
-
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+    USERNAME = "admin"
+    PASSWORD = "4dm1N"
