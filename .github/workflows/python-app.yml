@@ -2,9 +2,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "ci-pipeline-setup" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "ci-pipeline-setup" ]
 
 permissions:
   contents: read
