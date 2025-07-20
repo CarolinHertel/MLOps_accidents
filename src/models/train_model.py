@@ -81,7 +81,7 @@ with mlflow.start_run():
 
 # Optionally save with BentoML
 try:
-    # bentoml.sklearn.save_model("predict_model", rf_classifier)
+    bentoml.sklearn.save_model("predict_model", rf_classifier)
     print("✅ Model saved to BentoML successfully.")
 except Exception as e:
     print(f"❌ BentoML saving failed: {e}")
