@@ -1,4 +1,3 @@
-# Erweiterte Version deiner API mit Prometheus Monitoring + Webhook Integration
 import bentoml
 from bentoml.io import JSON
 import joblib
@@ -10,12 +9,12 @@ import jwt
 import os
 from dotenv import load_dotenv
 import numpy as np
+import pandas as pd
 import time
-from typing import Dict, Any, Optional
 import logging
 import requests
 from requests.auth import HTTPBasicAuth
-import json
+from typing import Dict, Any, Optional
 
 # Prometheus imports
 from prometheus_client import (
@@ -31,13 +30,18 @@ from fastapi.responses import Response
 load_dotenv()
 SECRET_KEY = os.getenv("JWT_SECRET", "I_know_that_this _is_unsecure_but_I_don't_care")
 ALGORITHM = "HS256"
-
-# Dummy credentials
 USERNAME = "admin"
 PASSWORD = "4dm1N"
 
 # Logger setup
 logger = logging.getLogger(__name__)
+
+# --- Load columns (order) for prediction ---
+COLUMNS_PATH = "trained_model_columns.npy"
+if os.path.exists(COLUMNS_PATH):
+    TRAIN_COLS = np.load(COLUMNS_PATH, allow_pickle=True)
+else:
+    TRAIN_COLS = None
 
 # Prometheus metrics
 request_count = Counter(
@@ -171,7 +175,6 @@ class AirflowAPIClient:
             raise ValueError("Either token or username/password must be provided.")
 
     def trigger_dag(self, dag_id: str, config: dict = None) -> dict:
-        """Trigger a DAG run"""
         url = f"{self.base_url}/api/v2/dags/{dag_id}/dagRuns"
         now = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
 
@@ -194,7 +197,6 @@ class AirflowAPIClient:
             raise Exception(f"Failed to trigger DAG: {str(e)}")
 
     def get_dag_run_status(self, dag_id: str, dag_run_id: str) -> dict:
-        """Get the status of a specific DAG run"""
         url = f"{self.base_url}/api/v2/dags/{dag_id}/dagRuns/{dag_run_id}"
 
         try:
@@ -213,7 +215,6 @@ class AirflowAPIClient:
             raise Exception(f"Failed to get DAG run status: {str(e)}")
 
     def get_dag_runs(self, dag_id: str, limit: int = 10) -> list:
-        """Get recent DAG runs"""
         url = f"{self.base_url}/api/v2/dags/{dag_id}/dagRuns"
         params = {"limit": limit, "order_by": "-execution_date"}
 
@@ -264,8 +265,6 @@ def setup_airflow_client():
 # Load model and setup clients
 model = load_model()
 airflow_client = setup_airflow_client()
-
-# BentoML Service
 svc = bentoml.Service("accident_prediction_with_webhook")
 
 
@@ -384,6 +383,16 @@ def login(request: dict):
 
 @app.post("/predict", dependencies=[Depends(verify_token)])
 async def predict_with_auth(input_data: AdmissionRequest):
+    from prometheus_client import Counter, Gauge
+    if not hasattr(predict_with_auth, "prediction_count"):
+        predict_with_auth.prediction_count = Counter(
+            'custom_predictions_total', 'Total predictions made by /predict endpoint'
+        )
+    if not hasattr(predict_with_auth, "prediction_score_gauge"):
+        predict_with_auth.prediction_score_gauge = Gauge(
+            'custom_last_prediction_score', 'Last prediction score by /predict endpoint'
+        )
+    predict_with_auth.prediction_count.inc()
     prediction_start = time.time()
 
     input_array = admission_request_to_numpy(input_data)
@@ -402,6 +411,12 @@ async def predict_with_auth(input_data: AdmissionRequest):
 
 @app.post("/predict-simple")
 async def predict_simple(input_data: AdmissionRequest):
+    from prometheus_client import Counter
+    if not hasattr(predict_simple, "prediction_simple_count"):
+        predict_simple.prediction_simple_count = Counter(
+            'custom_predictions_simple_total', 'Total predictions made by /predict-simple endpoint'
+        )
+    predict_simple.prediction_simple_count.inc()
     prediction_start = time.time()
 
     input_array = admission_request_to_numpy(input_data)
@@ -440,7 +455,6 @@ async def train_model(request: TriggerPipelineRequest):
     Webhook endpoint to trigger ML pipeline (requires authentication)
     """
     try:
-        # Validate Airflow client
         if airflow_client is None:
             raise HTTPException(
                 status_code=500, detail="Airflow client not initialized"
@@ -465,7 +479,7 @@ async def train_model(request: TriggerPipelineRequest):
 
         return PipelineResponse(
             success=True,
-            dag_run_id=result["dag_run_id"],
+            dag_run_id=result.get("dag_run_id"),
             message="ML Pipeline triggered successfully",
             config=config,
         )
@@ -477,11 +491,7 @@ async def train_model(request: TriggerPipelineRequest):
 
 @app.get("/pipeline-status/{dag_run_id}", response_model=StatusResponse)
 async def get_pipeline_status(dag_run_id: str):
-    """
-    Get status of a specific pipeline run
-    """
     try:
-        # Validate Airflow client
         if airflow_client is None:
             raise HTTPException(
                 status_code=500, detail="Airflow client not initialized"
@@ -503,7 +513,6 @@ async def get_pipeline_status(dag_run_id: str):
             start_date=status["start_date"],
             end_date=status.get("end_date"),
         )
-
     except Exception as e:
         logger.error(f"Error getting pipeline status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
