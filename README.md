@@ -68,37 +68,36 @@ Project Organization
 
 ---------
 
-## Steps to follow 
+Steps to follow
 
 Convention : All python scripts must be run from the root specifying the relative file path.
 
-### 1- Create a virtual environment using Virtualenv.
+1- Create a virtual environment using Virtualenv.
 
-    `python -m venv my_env`
+`python -m venv my_env`  
+Activate it
 
-###   Activate it 
+`./my_env/Scripts/activate`
 
-    `./my_env/Scripts/activate`
+1- Build docker container
 
-    alternative
+`docker build -t accidentpredictionservice:1.0.0 .`
 
-    my_env\Scripts\activate.bat
+2- Create the `.env` file (REQUIRED for Airflow)
 
-###   1-Build docker container
+Create a file named `.env` at the project root (next to `docker-compose.yml`) and add: `AIRFLOW_UID=50000`
 
-    docker build -t accidentpredictionservice:1.0.0 .
+3- Execute docker compose
 
-### 2- Execute docker compose
+`docker-compose up -d`
 
-    `docker-compose up -d.
+4- Run the Docker Container
 
-### 3- Run the Docker Container
+`docker run --rm -d -p 3000:3000 examen_bentoml:1.0.0`  
+BentoML API will be available at http://localhost:3000
 
-    docker run --rm -d -p 3000:3000 examen_bentoml:1.0.0
+5- Please use the login-service with this credentials
 
-# BentoML API will be available at `http://localhost:3000`
+USERNAME = "admin"  
+PASSWORD = "4dm1N"
 
-### 4- Please use the login-service with this credentials
-
-    USERNAME = "admin"
-    PASSWORD = "4dm1N"
