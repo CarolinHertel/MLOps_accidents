@@ -19,3 +19,7 @@ RUN pip show pydantic && pip show fastapi && pip show bentoml && pip show starle
 COPY . .
 COPY bentoml/models /root/bentoml/models
 
+# Launch BentoML API
+ENV PYTHONPATH=/code/src
+EXPOSE 3000
+CMD ["bentoml", "serve", "api.service:svc", "--host", "0.0.0.0", "--port", "3000"]
