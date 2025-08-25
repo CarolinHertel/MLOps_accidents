@@ -68,37 +68,47 @@ Project Organization
 
 ---------
 
-## Steps to follow 
+## Steps to follow
 
 Convention : All python scripts must be run from the root specifying the relative file path.
 
 ### 1- Create a virtual environment using Virtualenv.
 
-    `python -m venv my_env`
+`python -m venv my_env`  
+### Activate it
 
-###   Activate it 
+`./my_env/Scripts/activate`
 
-    `./my_env/Scripts/activate`
+### 2- Build docker container
 
-    alternative
+`docker build -t accidentpredictionservice:1.0.0 .`
 
-    my_env\Scripts\activate.bat
+### 3- Create the `.env` file
 
-###   1-Build docker container
+Create a file named `.env` in the project root (next to `docker-compose.yml`).  
+Start from `.env.example`:
 
-    docker build -t accidentpredictionservice:1.0.0 .
+# macOS / Linux
+cp .env.example .env
+echo "AIRFLOW_UID=$(id -u)" >> .env
 
-### 2- Execute docker compose
+# Windows (PowerShell or cmd)
+copy .env.example .env
+# open .env and ensure AIRFLOW_UID=50000
 
-    `docker-compose up -d.
+Do not commit your `.env` (keep `.env` in .gitignore). Commit only `.env.example`.
 
-### 3- Run the Docker Container
+### 4- Execute docker compose
 
-    docker run --rm -d -p 3000:3000 examen_bentoml:1.0.0
+`docker-compose up -d`
 
-# BentoML API will be available at `http://localhost:3000`
+### 5- Run the Docker Container
 
-### 4- Please use the login-service with this credentials
+`docker run --rm -d -p 3000:3000 examen_bentoml:1.0.0`  
+BentoML API will be available at http://localhost:3000
 
-    USERNAME = "admin"
-    PASSWORD = "4dm1N"
+### 6- Please use the login-service with this credentials
+
+USERNAME = "admin"  
+PASSWORD = "4dm1N"
+
