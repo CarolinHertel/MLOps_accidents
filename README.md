@@ -94,7 +94,8 @@ echo "AIRFLOW_UID=$(id -u)" >> .env
 
 # Windows (PowerShell or cmd)
 copy .env.example .env
-# open .env and ensure AIRFLOW_UID=50000
+
+open .env and ensure AIRFLOW_UID=50000
 
 Do not commit your `.env` (keep `.env` in .gitignore). Commit only `.env.example`.
 
@@ -111,4 +112,5 @@ BentoML API will be available at http://localhost:3000
 
 USERNAME = "admin"  
 PASSWORD = "4dm1N"
+
 
