@@ -123,6 +123,17 @@ PASSWORD = "4dm1N"
   Username: `admin`  
   Password: `admin`
 
+- **BentoML / API**
+  URL: http://localhost:3000
+  
+- **Prometheus**
+  URL: http://localhost:9090
+
+- **Flower (Celery UI)**
+  URL: http://localhost:5555
+
+
+
 
 
 
