@@ -88,11 +88,11 @@ Convention : All python scripts must be run from the root specifying the relativ
 Create a file named `.env` in the project root (next to `docker-compose.yml`).  
 Start from `.env.example`:
 
-# macOS / Linux
+#### macOS / Linux
 cp .env.example .env
 echo "AIRFLOW_UID=$(id -u)" >> .env
 
-# Windows (PowerShell or cmd)
+#### Windows (PowerShell or cmd)
 copy .env.example .env
 
 open .env and ensure AIRFLOW_UID=50000
@@ -112,5 +112,17 @@ BentoML API will be available at http://localhost:3000
 
 USERNAME = "admin"  
 PASSWORD = "4dm1N"
+
+- **Airflow (Web UI)**  
+  URL: `http://localhost:8080`  
+  Username: `airflow`  
+  Password: `airflow`
+
+- **Grafana**  
+  URL: `http://localhost:3001`  
+  Username: `admin`  
+  Password: `admin`
+
+
 
 
