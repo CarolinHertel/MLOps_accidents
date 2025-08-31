@@ -110,3 +110,4 @@ data/raw_data/lieux-2021.csv
 data/raw_data/usagers-2021.csv
 data/raw_data/vehicules-2021.csv
 dags/models/rf_classifier_model.pkl
+.venv/
