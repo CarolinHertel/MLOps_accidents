@@ -68,69 +68,75 @@ Project Organization
 
 ---------
 
+## Prerequisites
+- Docker and Docker Compose installed
+- Run commands from the repository root
+
 ## Steps to follow
 
-Convention : All python scripts must be run from the root specifying the relative file path.
-
-### 1- Create a virtual environment using Virtualenv.
-
-`python -m venv my_env`  
-### Activate it
-
-`./my_env/Scripts/activate`
-
-### 2- Build docker container
-
-`docker build -t accidentpredictionservice:1.0.0 .`
-
-### 3- Create the `.env` file
-
-Create a file named `.env` in the project root (next to `docker-compose.yml`).  
-Start from `.env.example`:
-
-#### macOS / Linux
+### 1 Prepare environment (.env)
+#### On macOS / Linux:
 cp .env.example .env
-echo "AIRFLOW_UID=$(id -u)" >> .env
+echo AIRFLOW_UID=$(id -u) >> .env
 
-#### Windows (PowerShell or cmd)
+#### On Windows (PowerShell):
 copy .env.example .env
+rem open .env and set AIRFLOW_UID=50000 if needed
 
-open .env and ensure AIRFLOW_UID=50000
+### 2 (Optional) Build local prediction image
+docker build -t accidentpredictionservice:1.0.0 .
 
-Do not commit your `.env` (keep `.env` in .gitignore). Commit only `.env.example`.
+### 3 Start the stack
+docker compose -f docker-compose.yaml up -d
 
-### 4- Execute docker compose
+### 4 Confirm services are running
+docker compose -f docker-compose.yaml ps
 
-`docker-compose up -d`
+### 5 Confirm Grafana provisioning files are mounted in the container
+docker compose -f docker-compose.yaml exec -T grafana sh -c "ls -la /etc/grafana/provisioning/dashboards /etc/grafana/provisioning/datasources /var/lib/grafana/dashboards || true"
 
-### 5- Run the Docker Container
+### 6 Use Grafana API to list dashboards
+curl -sS -u admin:admin "http://localhost:3001/api/search?query="
 
-`docker run --rm -d -p 3000:3000 examen_bentoml:1.0.0`  
-BentoML API will be available at http://localhost:3000
+### 7 Check that grafana-dashboard is provisioned from file
+curl -sS -u admin:admin "http://localhost:3001/api/dashboards/uid/grafana-dashboard" | python -c "import sys,json; j=json.load(sys.stdin); m=j.get('meta',{}); print('provisioned:', m.get('provisioned')); print('provisionedExternalId:', m.get('provisionedExternalId'))"
 
-### 6- Please use the login-service with this credentials
+### 8 Check that bentoml-dashboard is present
+curl -sS -u admin:admin "http://localhost:3001/api/dashboards/uid/bentoml-dashboard" | python -c "import sys,json; j=json.load(sys.stdin); print(j.get('dashboard', {}).get('uid'))"
 
-USERNAME = "admin"  
-PASSWORD = "4dm1N"
+### 9 Quick browser URLs
+http://localhost:3001/d/grafana-dashboard/grafana-dashboard
+http://localhost:3001/d/bentoml-dashboard/bentoml-admission-prediction-api-dashboard
 
-- **Airflow (Web UI)**  
-  URL: `http://localhost:8080`  
-  Username: `airflow`  
-  Password: `airflow`
+Username = admin
+Password = 4dm1N
 
-- **Grafana**  
-  URL: `http://localhost:3001`  
-  Username: `admin`  
-  Password: `admin`
+Grafana credentials
+Username: admin
+Password: admin
 
-- **BentoML / API**
-  URL: http://localhost:3000
-  
-- **Prometheus**
-  URL: http://localhost:9090
+BentoML / API 
+http://localhost:3000
 
-- **Flower (Celery UI)**
-  URL: http://localhost:5555
+Prometheus UI
+http://localhost:9090
+
+Flower (Celery UI) 
+http://localhost:5555
+
+Airflow UI
+http://localhost:8080
+Username: airflow
+Password: airflow
+
+### 10 Prediction server (if required)
+docker compose -f docker-compose.yaml ps prediction-server
+If the image does not serve automatically, run:
+docker run --rm -d -p 3000:3000 accidentpredictionservice:1.0.0
+
+### 11 Stop the stack
+docker compose -f docker-compose.yaml down
+
 
 
 
