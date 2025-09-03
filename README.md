@@ -108,9 +108,6 @@ curl -sS -u admin:admin "http://localhost:3001/api/dashboards/uid/bentoml-dashbo
 http://localhost:3001/d/grafana-dashboard/grafana-dashboard
 http://localhost:3001/d/bentoml-dashboard/bentoml-admission-prediction-api-dashboard
 
-Username = admin
-Password = 4dm1N
-
 Grafana credentials
 Username: admin
 Password: admin
@@ -136,6 +133,7 @@ docker run --rm -d -p 3000:3000 accidentpredictionservice:1.0.0
 
 ### 11 Stop the stack
 docker compose -f docker-compose.yaml down
+
 
 
 
