@@ -104,8 +104,9 @@ curl -sS -u admin:admin "http://localhost:3001/api/dashboards/uid/grafana-dashbo
 ### 8 Check that bentoml-dashboard is present
 curl -sS -u admin:admin "http://localhost:3001/api/dashboards/uid/bentoml-dashboard" | python -c "import sys,json; j=json.load(sys.stdin); print(j.get('dashboard', {}).get('uid'))"
 
-### 9 Quick browser URLs
+### 9 Credentials
 http://localhost:3001/d/grafana-dashboard/grafana-dashboard
+
 http://localhost:3001/d/bentoml-dashboard/bentoml-admission-prediction-api-dashboard
 
 Grafana credentials
@@ -133,6 +134,7 @@ docker run --rm -d -p 3000:3000 accidentpredictionservice:1.0.0
 
 ### 11 Stop the stack
 docker compose -f docker-compose.yaml down
+
 
 
 
