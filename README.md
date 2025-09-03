@@ -127,13 +127,14 @@ http://localhost:8080
 Username: airflow
 Password: airflow
 
-### 10 Prediction server (if required)
+### 10 Prediction server
 docker compose -f docker-compose.yaml ps prediction-server
 If the image does not serve automatically, run:
 docker run --rm -d -p 3000:3000 accidentpredictionservice:1.0.0
 
 ### 11 Stop the stack
 docker compose -f docker-compose.yaml down
+
 
 
 
